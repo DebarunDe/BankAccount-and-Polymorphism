@@ -44,8 +44,8 @@ public abstract class BankAccount {
 	
 	public void transfer(BankAccount other, double amt) {
 		
-		balance -= amt;
-		other.balance += amt;
+		other.deposit(amt);
+		this.withdraw(amt);
 		
 	}
 	
