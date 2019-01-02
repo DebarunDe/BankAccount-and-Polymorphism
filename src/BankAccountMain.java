@@ -1,5 +1,19 @@
 import java.util.*;
 public class BankAccountMain {
+	
+	private static boolean isNumeric(String str)
+	{
+	try
+	{
+	Double.parseDouble(str);
+	return true;
+	}
+			catch(IllegalArgumentException e)
+			{
+				return false;
+			}
+			}
+
 
 	public static void main(String[] args) {
 		
@@ -78,10 +92,26 @@ public class BankAccountMain {
 				//With Initial Balance 
 				if(initializebalance.equals(yes))
 				{
+				boolean dean = true;
 					System.out.println("How much?");
 					System.out.print("Amount: ");
 					double deposit = in.nextDouble();
 					in.nextLine();
+					
+					//while not a double for initialize balance
+					while(dean)	{
+						try{
+							deposit = in.nextDouble();
+							in.nextLine();
+							
+							dean = false;
+						}
+						catch(InputMismatchException e)
+						{
+							System.out.println("Not valid, please enter a number");
+							System.out.println("Answer: ");
+						}
+					}
 					
 					//Account w/ Balance creation
 					acct.add(new SavingsAccount(name1, deposit, RATE, MIN_BAL, MIN_BAL_FEE));
@@ -155,6 +185,134 @@ public class BankAccountMain {
 					acct.add(new CheckingAccount(name1, OVER_DRAFT_FEE, TRANSACTION_FEE, FREE_TRANSACTION));
 					System.out.println(acct.toString());
 				}
+			}
+		}
+
+		//If transaction method
+		if(answer1.equals(ans2))
+		{
+			System.out.println("Would you like to make a withdraw (withdraw), deposit (deposit), transfer (transfer), or get account numbers (get number)");
+			System.out.print("Answer: ");
+			String transactionType = in.next();
+			in.nextLine();
+			//Need to put error exception
+			//switch case methods for declaration
+			switch(transactionType) {		
+			case "withdraw" :
+			{
+				//Finding Account Number 
+				System.out.println("Please enter your account number");
+				System.out.print("Number: ");
+				int acctNum = in.nextInt();
+				in.nextLine();
+				
+				//while acctnumber is not number
+				while(!isNumeric(in.next()) || in.nextInt() < 0)
+				{
+					System.out.println("Please try again:");
+					acctNum = in.nextInt();
+				}
+				
+				System.out.println("What is the withdraw amount?");
+				
+				double amt = in.nextDouble();
+				in.nextLine();
+				//try to execute command
+				try
+				{
+					acct.get(acctNum - 1).withdraw(amt);
+				}
+				catch(IllegalArgumentException e)
+				{
+					System.out.println("Transaction not Authorized");
+				}
+			}
+			case "deposit" :
+			{
+				//Finding Account Number 
+				System.out.println("Please enter your account number");
+				System.out.print("Number: ");
+				int acctNum = in.nextInt();
+				in.nextLine();
+				
+				//while acctnumber is not number
+				while(!isNumeric(in.next()) || in.nextInt() < 0)
+				{
+					System.out.println("Please try again:");
+					acctNum = in.nextInt();
+				}
+				
+				System.out.println("What is the withdraw amount?");
+				
+				double amt = in.nextDouble();
+				in.nextLine();
+				
+				//try to execute command
+				try
+				{
+					acct.get(acctNum - 1).deposit(amt);
+				}
+				catch(IllegalArgumentException e)
+				{
+					System.out.println("Transaction not Authorized");
+				}
+			}
+			case "transfer":
+			{
+				//Finding Account Number 
+				System.out.println("Please enter your account number");
+				System.out.print("Number: ");
+				int acctNum = in.nextInt();
+				in.nextLine();
+				
+				//while acctnumber is not number
+				while(!isNumeric(in.next()) || in.nextInt() < 0)
+				{
+					System.out.println("Please try again:");
+					acctNum = in.nextInt();
+				}
+				
+				//Finding transfer Account Number
+				System.out.println("Please enter the transfer bankaccount number: ");
+				System.out.print("Number: ");
+				int transferAcct = in.nextInt();
+				in.nextLine();
+				
+				//while acctnumber2 is not number
+				while(!isNumeric(in.next()) || in.nextInt() < 0)
+				{
+					System.out.println("Please try again:");
+					acctNum = in.nextInt();
+				}
+				
+				//determining transfer amount
+                System.out.println("What is the withdraw amount?");
+				
+				double amt = in.nextDouble();
+				in.nextLine();
+				
+				try
+				{
+					(acct.get(acctNum - 1)).transfer(acct.get(transferAcct - 1), amt);
+				}
+				catch(IllegalArgumentException e)
+				{
+					System.out.println("Transaction not Authorized");
+				}
+			}
+			case "get number":
+			{
+				//getting the name of account
+				System.out.println("What is the account name?");
+				String name = in.next();
+				in.nextLine();
+				
+				//if name is not found
+				for(BankAccount account : acct)
+				{
+					if(name.equals(arg0))
+				}
+			}
 			}
 		}
 	}
