@@ -9,14 +9,14 @@ public abstract class BankAccount {
  public BankAccount(String n) {
  
  name = n;
- acctNum = nextAccNum + 1;
+ nextAccNum = acctNum + 1;
  balance = 0;
  }
  
  public BankAccount(String n, double b) {
  
  name = n;
- acctNum = nextAccNum + 1;
+ nextAccNum = acctNum + 1;
  this.balance = b;
  }
  
@@ -41,6 +41,10 @@ public abstract class BankAccount {
  return name;
  }
  
+ public int getAcctNum(){
+	 
+	 return acctNum;
+ }
  public double getBalance() {
  
  return balance;
