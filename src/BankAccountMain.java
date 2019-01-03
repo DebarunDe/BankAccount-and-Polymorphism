@@ -13,6 +13,20 @@ public class BankAccountMain {
 				return false;
 			}
 	}
+	
+	private static boolean isAcct(String str)
+	{
+	try
+	{
+	Integer.parseInt(str);
+	return true;
+	}
+			catch(IllegalArgumentException e)
+			{
+				return false;
+			}
+	}
+	
 
 
 	public static void main(String[] args) {
@@ -211,48 +225,33 @@ public class BankAccountMain {
 			}
 			
 			//switch case methods for declaration = G
-			switch(transactionType) {		
+			switch(transactionType) {	
+			
 			case "withdraw" :
 			{
 				//Finding Account Number 
-				int count = 0;
 				System.out.println("Please enter your account number");
 				System.out.print("Number: ");
-				int acctNum = in.nextInt();
+				String acctNum = in.next();
 				in.nextLine();
+			
+				//If account number or not
+				while(!isAcct(acctNum) || Integer.parseInt(acctNum) > acct.size() || Integer.parseInt(acctNum) < 0)
+						{
+					System.out.println("Invalid Account Number, Try again");
+					System.out.print("Number: ");
+					acctNum = in.next();
+						}
 				
-				//while acctnumber is not number = NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-				while(!isNumeric(in.next()) || in.nextInt() < 0)
-				{
-					System.out.println("Please try again:");
-					acctNum = in.nextInt();
-				}
-				
-				//Finding the accounts = NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-				for(BankAccount account : acct)
-				{
-					if(acctNum == account.getAcctNum())
-						System.out.println(account.toString());
-					count ++;
-				}
-				//If name yields no account = G
-			    while(count == 0)
-			    {
-			    	System.out.println("Not valid, please try again");
-					System.out.println("Answer: ");
-					acctNum = in.nextInt();
-					in.nextLine();
-			    }
-			    
 				System.out.println("What is the withdraw amount?");
 				System.out.print("Answer: ");
 				double amt = in.nextDouble();
 				in.nextLine();
-				
+				//Need to add find string mechanic
 				//try to execute command
 				try
 				{
-					acct.get(acctNum - 1).withdraw(amt);
+					acct.get(Integer.parseInt(acctNum)).withdraw(amt);
 					System.out.println(acct.toString());
 				}
 				catch(IllegalArgumentException e)
@@ -260,6 +259,7 @@ public class BankAccountMain {
 					System.out.println("Transaction not Authorized");
 				}
 			}
+			
 			case "deposit" :
 			{
 				//Finding Account Number 
@@ -290,6 +290,7 @@ public class BankAccountMain {
 					System.out.println("Transaction not Authorized");
 				}
 			}
+			
 			case "transfer":
 			{
 				//Finding Account Number 
@@ -333,6 +334,7 @@ public class BankAccountMain {
 					System.out.println("Transaction not Authorized");
 				}
 			}
+			
 			case "get":
 			{
 				//getting the name of account = G

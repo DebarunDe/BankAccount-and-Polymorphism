@@ -9,14 +9,16 @@ public abstract class BankAccount {
  public BankAccount(String n) {
  
  name = n;
- nextAccNum = acctNum + 1;
+ acctNum = nextAccNum;
+		 nextAccNum ++;
  balance = 0;
  }
  
  public BankAccount(String n, double b) {
  
  name = n;
- nextAccNum = acctNum + 1;
+ acctNum = nextAccNum;
+ nextAccNum ++;
  this.balance = b;
  }
  
