@@ -57,6 +57,7 @@ public class BankAccountMain {
 		String answer1 = in.next();
 		in.nextLine();
 		
+		
 		//If not valid answer = G
 		while(!answer1.equals(ans1) && !answer1.equals(ans2) && !answer1.equals(ans3))
 		{
@@ -64,9 +65,10 @@ public class BankAccountMain {
 			System.out.println("Answer: ");
 			answer1 = in.next();
 			in.nextLine();
+			
 		}
 		
-		//If Answer is to add account = G/N
+		//If Answer is to add account = G
 		if(answer1.equals(ans1))
 		{
 			System.out.println("Would you like a Checking Account (type checking), or a Savings Account (type saving)");
@@ -113,28 +115,26 @@ public class BankAccountMain {
 				//With Initial Balance = G
 				if(initializebalance.equals(yes))
 				{
-				boolean dean = true;
+					String deposit;
+					double d = 0;
 					System.out.println("How much?");
 					System.out.print("Amount: ");
-					 double deposit = 0;
+					deposit = in.next();
+					in.nextLine();
 					
-					//while not a double for initialize balance = NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNn
-					while(dean)	{
-						try{
-							deposit = in.nextDouble();
-							in.nextLine();
-							
-							dean = false;
-						}
-						catch(InputMismatchException e)
-						{
-							System.out.println("Not valid, please enter a number");
-							System.out.println("Answer: ");
-						}
+					//While not a number = G
+					while(!isNumeric(deposit))
+					{
+						System.out.println("Invalid Response, please try again.");
+						System.out.print("Answer: ");
+						deposit = in.next();
+						in.nextLine();
 					}
 					
+					d = Double.valueOf(deposit).doubleValue();
+					
 					//Account w/ Balance creation = G
-					acct.add(new SavingsAccount(name1, deposit, RATE, MIN_BAL, MIN_BAL_FEE));
+					acct.add(new SavingsAccount(name1, d, RATE, MIN_BAL, MIN_BAL_FEE));
 					System.out.println(acct.toString());
 				}
 				
@@ -173,28 +173,26 @@ public class BankAccountMain {
 				//With Initial Balance = G
 				if(initializebalance.equals(yes))
 				{
+					String deposit;
+					double d = 0;
 					System.out.println("How much?");
 					System.out.print("Amount: ");
-					boolean dean = true;
-					double deposit=0;
+					deposit = in.next();
+					in.nextLine();
 					
-					//While not a number = NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNn
-				while(dean)	{
-					try{
-						deposit = in.nextDouble();
-						in.nextLine();
-						
-						dean = false;
-					}
-					catch(InputMismatchException e)
-					{
-						System.out.println("Not valid, please enter a number");
-						System.out.println("Answer: ");
-					}
+					//While not a number = G
+				while(!isNumeric(deposit))
+				{
+					System.out.println("Invalid Response, please try again.");
+					System.out.print("Answer: ");
+					deposit = in.next();
+					in.nextLine();
 				}
+				
+				d = Double.valueOf(deposit).doubleValue();
 					
 					//Account w/ Balance creation = G
-					acct.add(new CheckingAccount(name1, deposit, OVER_DRAFT_FEE, TRANSACTION_FEE, FREE_TRANSACTION));
+					acct.add(new CheckingAccount(name1, d, OVER_DRAFT_FEE, TRANSACTION_FEE, FREE_TRANSACTION));
 					System.out.println(acct.toString());
 				}
 				
@@ -237,27 +235,37 @@ public class BankAccountMain {
 			
 				//If account number or not
 				while(!isAcct(acctNum) || Integer.parseInt(acctNum) > acct.size() || Integer.parseInt(acctNum) < 0)
-						{
-					System.out.println("Invalid Account Number, Try again");
-					System.out.print("Number: ");
-					acctNum = in.next();
-						}
+				{
+			
+				}
 				
 				System.out.println("What is the withdraw amount?");
 				System.out.print("Answer: ");
-				double amt = in.nextDouble();
+				String amt = in.next();
 				in.nextLine();
+				
 				//Need to add find string mechanic
+				while(!isNumeric(amt))
+				{
+					System.out.println("Invalid Response, please try again.");
+					System.out.print("Answer: ");
+					amt = in.next();
+					in.nextLine();
+				}
+				
+				double amount = Double.valueOf(amt).doubleValue();
+				
 				//try to execute command
 				try
 				{
-					acct.get(Integer.parseInt(acctNum)).withdraw(amt);
+					acct.get(Integer.parseInt(acctNum)).withdraw(amount);
 					System.out.println(acct.toString());
 				}
 				catch(IllegalArgumentException e)
 				{
 					System.out.println("Transaction not Authorized");
 				}
+				break;
 			}
 			
 			case "deposit" :
@@ -265,30 +273,42 @@ public class BankAccountMain {
 				//Finding Account Number 
 				System.out.println("Please enter your account number");
 				System.out.print("Number: ");
-				int acctNum = in.nextInt();
+				String acctNum = in.next();
+				in.nextLine();
+			
+				//If account number or not
+				while(!isAcct(acctNum) || Integer.parseInt(acctNum) > acct.size() || Integer.parseInt(acctNum) < 0)
+						{
+					
+						}
+				
+				System.out.println("What is the deposit amount?");
+				System.out.print("Answer: ");
+				String amt = in.next();
 				in.nextLine();
 				
-				//while acctnumber is not number
-				while(!isNumeric(in.next()) || in.nextInt() < 0)
+				// find string mechanic
+				while(!isNumeric(amt))
 				{
-					System.out.println("Please try again:");
-					acctNum = in.nextInt();
+					System.out.println("Invalid Response, please try again.");
+					System.out.print("Answer: ");
+					amt = in.next();
+					in.nextLine();
 				}
 				
-				System.out.println("What is the withdraw amount?");
-				
-				double amt = in.nextDouble();
-				in.nextLine();
+				double amount = Double.valueOf(amt).doubleValue();
 				
 				//try to execute command
 				try
 				{
-					acct.get(acctNum - 1).deposit(amt);
+					acct.get(Integer.parseInt(acctNum)).deposit(amount);
+					System.out.println(acct.toString());
 				}
 				catch(IllegalArgumentException e)
 				{
 					System.out.println("Transaction not Authorized");
 				}
+				break;
 			}
 			
 			case "transfer":
@@ -296,43 +316,102 @@ public class BankAccountMain {
 				//Finding Account Number 
 				System.out.println("Please enter your account number");
 				System.out.print("Number: ");
-				int acctNum = in.nextInt();
+				String acctNum = in.next();
 				in.nextLine();
+			
+				//If account number or not
+				while(!isAcct(acctNum) || Integer.parseInt(acctNum) > acct.size() || Integer.parseInt(acctNum) < 0)
+			{
+					//Special Case = NNNNNNNNNNNNNN
+			System.out.println("Invalid Account Number, Try again or get account numbers (get)");
+			System.out.print("Answer: ");
+			String answer9 = in.next();
+			in.nextLine();
+			
+			switch(answer9) {
 				
-				//while acctnumber is not number
-				while(!isNumeric(in.next()) || in.nextInt() < 0)
+			case "get":
+			{
+				System.out.println("What is the account name?");
+				String name = in.next();
+				in.nextLine();
+				int count = 0;
+				
+				//Finding the accounts = G
+			while(count == 0)
+			{
+				for(BankAccount account : acct)
 				{
-					System.out.println("Please try again:");
-					acctNum = in.nextInt();
+					if(name.equals(account.getName()))
+					{
+						if(account instanceof CheckingAccount)
+						{
+						System.out.println("Checking: " + account.toString());
+					    count ++;
+						}
+						else
+						{
+							System.out.println("Saving: " + account.toString());
+							count ++;
+						}
+					}
+					if(count == 0)
+					{
+					System.out.println("Not valid, please try again");
+					System.out.println("Answer: ");
+					name = in.next();
+					in.nextLine();
+					}
+				}
+			}
+			break;
+				}
+			}
+			acctNum = in.next();
 				}
 				
 				//Finding transfer Account Number
-				System.out.println("Please enter the transfer bankaccount number: ");
+				System.out.println("Please enter the bankaccount number that you want to transfer to: ");
 				System.out.print("Number: ");
-				int transferAcct = in.nextInt();
+				String transferAcct = in.next();
 				in.nextLine();
 				
-				//while acctnumber2 is not number
-				while(!isNumeric(in.next()) || in.nextInt() < 0)
-				{
-					System.out.println("Please try again:");
-					acctNum = in.nextInt();
-				}
+				//If account number or not
+				while(!isAcct(transferAcct) || Integer.parseInt(transferAcct) > acct.size() || Integer.parseInt(transferAcct) < 0)
+						{
+					System.out.println("Invalid Account Number, Try again");
+					System.out.print("Number: ");
+					transferAcct = in.next();
+						}
 				
 				//determining transfer amount
-                System.out.println("What is the withdraw amount?");
+                System.out.println("What is the transfer amount?");
 				
-				double amt = in.nextDouble();
+				String amt = in.next();
 				in.nextLine();
 				
+				//if not a number 
+				while(!isNumeric(amt))
+				{
+					System.out.println("Invalid Response, please try again.");
+					System.out.print("Answer: ");
+					amt = in.next();
+					in.nextLine();
+				}
+				
+				double amount = Double.valueOf(amt).doubleValue();
+				
+				//Execution = G
 				try
 				{
-					(acct.get(acctNum - 1)).transfer(acct.get(transferAcct - 1), amt);
+					acct.get(Integer.parseInt(acctNum)).transfer(acct.get(Integer.parseInt(transferAcct)), amount);
+					System.out.println(acct.toString());
 				}
 				catch(IllegalArgumentException e)
 				{
 					System.out.println("Transaction not Authorized");
 				}
+				break;
 			}
 			
 			case "get":
@@ -344,20 +423,25 @@ public class BankAccountMain {
 				int count = 0;
 				
 				//Finding the accounts = G
+			while(count == 0)
+			{
 				for(BankAccount account : acct)
 				{
 					if(name.equals(account.getName()))
+					{
 						System.out.println(account.toString());
 					count ++;
-				}
-				//If name yields no account = G
-			    while(count == 0)
-			    {
-			    	System.out.println("Not valid, please try again");
+					}
+					if(count == 0)
+					{
+					System.out.println("Not valid, please try again");
 					System.out.println("Answer: ");
 					name = in.next();
 					in.nextLine();
-			    }
+					}
+				}
+			}
+			    break;
 			}
 			}
 		}
