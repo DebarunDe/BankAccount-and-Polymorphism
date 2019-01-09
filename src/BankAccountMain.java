@@ -90,7 +90,7 @@ public class BankAccountMain {
 			//If Saving = G
 			if(answer2.equals(saving))
 			{
-				System.out.println("What is the name for the Savings account?");
+				System.out.println("What is the name for the account?");
 				System.out.print("Answer: ");
 				String name1 = in.next();
 				in.nextLine();
@@ -132,17 +132,20 @@ public class BankAccountMain {
 					}
 					
 					d = Double.valueOf(deposit).doubleValue();
+
 					
 					//Account w/ Balance creation = G
-					acct.add(new SavingsAccount(name1, d, RATE, MIN_BAL, MIN_BAL_FEE));
-					System.out.println(acct.toString());
+					SavingsAccount acc = new SavingsAccount(name1, d, RATE, MIN_BAL, MIN_BAL_FEE);
+					acct.add(acc);
+					System.out.println(acc.toString());
 				}
 				
 				//Without Initial Balance = G
 				if(initializebalance.equals(no))
 				{
-					acct.add(new SavingsAccount(name1, RATE, MIN_BAL, MIN_BAL_FEE));
-					System.out.println(acct.toString());
+					SavingsAccount acc = new SavingsAccount(name1, RATE, MIN_BAL, MIN_BAL_FEE);
+					acct.add(acc);
+					System.out.println(acc.toString());
 				}
 			}
 			
@@ -192,15 +195,17 @@ public class BankAccountMain {
 				d = Double.valueOf(deposit).doubleValue();
 					
 					//Account w/ Balance creation = G
-					acct.add(new CheckingAccount(name1, d, OVER_DRAFT_FEE, TRANSACTION_FEE, FREE_TRANSACTION));
-					System.out.println(acct.toString());
+				CheckingAccount acc = new CheckingAccount(name1, d, OVER_DRAFT_FEE, TRANSACTION_FEE, FREE_TRANSACTION);
+					acct.add(acc);
+					System.out.println(acc.toString());
 				}
 				
 				//Without Initial Balance = G
 				if(initializebalance.equals(no))
 				{
-					acct.add(new CheckingAccount(name1, OVER_DRAFT_FEE, TRANSACTION_FEE, FREE_TRANSACTION));
-					System.out.println(acct.toString());
+					CheckingAccount acc = new CheckingAccount(name1, OVER_DRAFT_FEE, TRANSACTION_FEE, FREE_TRANSACTION);
+					acct.add(acc);
+					System.out.println(acc.toString());
 				}
 			}
 		}
@@ -208,13 +213,86 @@ public class BankAccountMain {
 		//If transaction method
 		if(answer1.equals(ans2))
 		{
-			System.out.println("Would you like to make a withdraw (withdraw), deposit (deposit), transfer (transfer), or get account numbers (get)");
-			System.out.print("Answer: ");
-			String transactionType = in.next();
+			//Finding Account Number 
+			System.out.println("Please enter your account number");
+			System.out.print("Number: ");
+			String acctNum = in.next();
 			in.nextLine();
 			
+			//If account number or not
+			while(!isAcct(acctNum) || Integer.parseInt(acctNum) > acct.size() - 1 || Integer.parseInt(acctNum) < 0)
+			{
+				//Special Case = NNNNNNNNNNNNNN
+				System.out.println("Invalid Account Number, Try again (try) or get account numbers (get)");
+				System.out.print("Answer: ");
+				String answer9 = in.next();
+				String ans13 = "get";
+				String ans14 = "try";
+				in.nextLine();
+				int count = 0;
+				int Number;
+				
+				if(!answer9.equals(ans13) || !answer9.equals(ans14)) {
+					
+					System.out.println("Invalid, try again");
+					System.out.print("Answer: ");
+					answer9 = in.next();
+				}
+				
+				if(answer9.equals(ans13)) {
+					
+					System.out.println("What is the account name?");
+					String name = in.next();
+					in.nextLine();
+					
+						//Finding the accounts = G
+						for(BankAccount account : acct)
+						{
+							if(name.equals(account.getName()))
+							{
+								if(account instanceof CheckingAccount)
+								{
+								System.out.println("Checking: " + account.toString());
+							   Number = account.getAcctNum();
+							  acctNum = Integer.toString(Number);
+								}
+								else
+								{
+									System.out.println("Saving: " + account.toString());
+									 Number = account.getAcctNum();
+									  acctNum = Integer.toString(Number);
+								}
+							}
+						}
+						if (acct.size() >= 0)
+						{
+						System.out.println("The last account in the list is where the transaction will occur in");
+						}
+						
+						if(acct.size() == 0)
+						{
+							System.out.println("No Accounts Detected");	
+						}
+				
+						break;
+}
+				else if(answer9.equals(ans14))
+				{
+					System.out.println("Account Number: ");
+					acctNum = in.next();
+				}
+			}
+			
+			String transactionType;
+		
+			System.out.println("Would you like to make a withdraw (withdraw), deposit (deposit), transfer (transfer), get account numbers (get), or return to main menu (return)");
+			System.out.print("Answer: ");
+		    transactionType = in.next();
+			in.nextLine();
+			
+			
 			//put error exception = G
-			while(!transactionType.equals("withdraw") && !transactionType.equals("deposit") && !transactionType.equals("transfer") && !transactionType.equals("get"))
+			while(!transactionType.equals("withdraw") && !transactionType.equals("deposit") && !transactionType.equals("transfer") && !transactionType.equals("get") && !transactionType.equals("return"))
 			{
 				System.out.println("Not valid, please try again");
 				System.out.println("Answer: ");
@@ -222,23 +300,17 @@ public class BankAccountMain {
 				in.nextLine();
 			}
 			
+			if(acct.size() == 0)
+			{
+				 transactionType = "return";
+				 System.out.println("Error no accounts found");
+			}
+			
 			//switch case methods for declaration = G
 			switch(transactionType) {	
 			
 			case "withdraw" :
 			{
-				//Finding Account Number 
-				System.out.println("Please enter your account number");
-				System.out.print("Number: ");
-				String acctNum = in.next();
-				in.nextLine();
-			
-				//If account number or not
-				while(!isAcct(acctNum) || Integer.parseInt(acctNum) > acct.size() || Integer.parseInt(acctNum) < 0)
-				{
-			
-				}
-				
 				System.out.println("What is the withdraw amount?");
 				System.out.print("Answer: ");
 				String amt = in.next();
@@ -269,19 +341,7 @@ public class BankAccountMain {
 			}
 			
 			case "deposit" :
-			{
-				//Finding Account Number 
-				System.out.println("Please enter your account number");
-				System.out.print("Number: ");
-				String acctNum = in.next();
-				in.nextLine();
-			
-				//If account number or not
-				while(!isAcct(acctNum) || Integer.parseInt(acctNum) > acct.size() || Integer.parseInt(acctNum) < 0)
-						{
-					
-						}
-				
+			{	
 				System.out.println("What is the deposit amount?");
 				System.out.print("Answer: ");
 				String amt = in.next();
@@ -313,62 +373,6 @@ public class BankAccountMain {
 			
 			case "transfer":
 			{
-				//Finding Account Number 
-				System.out.println("Please enter your account number");
-				System.out.print("Number: ");
-				String acctNum = in.next();
-				in.nextLine();
-			
-				//If account number or not
-				while(!isAcct(acctNum) || Integer.parseInt(acctNum) > acct.size() || Integer.parseInt(acctNum) < 0)
-			{
-					//Special Case = NNNNNNNNNNNNNN
-			System.out.println("Invalid Account Number, Try again or get account numbers (get)");
-			System.out.print("Answer: ");
-			String answer9 = in.next();
-			in.nextLine();
-			
-			switch(answer9) {
-				
-			case "get":
-			{
-				System.out.println("What is the account name?");
-				String name = in.next();
-				in.nextLine();
-				int count = 0;
-				
-				//Finding the accounts = G
-			while(count == 0)
-			{
-				for(BankAccount account : acct)
-				{
-					if(name.equals(account.getName()))
-					{
-						if(account instanceof CheckingAccount)
-						{
-						System.out.println("Checking: " + account.toString());
-					    count ++;
-						}
-						else
-						{
-							System.out.println("Saving: " + account.toString());
-							count ++;
-						}
-					}
-					if(count == 0)
-					{
-					System.out.println("Not valid, please try again");
-					System.out.println("Answer: ");
-					name = in.next();
-					in.nextLine();
-					}
-				}
-			}
-			break;
-				}
-			}
-			acctNum = in.next();
-				}
 				
 				//Finding transfer Account Number
 				System.out.println("Please enter the bankaccount number that you want to transfer to: ");
@@ -442,6 +446,11 @@ public class BankAccountMain {
 				}
 			}
 			    break;
+			}
+			case "return":
+			{
+				System.out.println("Returning...");
+				break;
 			}
 			}
 		}
